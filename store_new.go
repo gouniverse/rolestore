@@ -10,18 +10,36 @@ import (
 
 // NewStoreOptions define the options for creating a new block store
 type NewStoreOptions struct {
-	RoleTableName      string
-	DB                 *sql.DB
-	DbDriverName       string
+	// RoleTableName is the name of the role table
+	RoleTableName string
+
+	// EntityRoleTableName is the name of the entity to role relation table
+	EntityRoleTableName string
+
+	// DB is the underlying database connection
+	DB *sql.DB
+
+	// DbDriverName is the database driver name/type
+	DbDriverName string
+
+	// AutomigrateEnabled indicates whether to automatically migrate the database
 	AutomigrateEnabled bool
-	DebugEnabled       bool
-	SqlLogger          *slog.Logger
+
+	// DebugEnabled enables or disables the debug mode
+	DebugEnabled bool
+
+	// SqlLogger is the sql statement logger when debug mode is enabled, defaults to the default logger
+	SqlLogger *slog.Logger
 }
 
 // NewStore creates a new block store
 func NewStore(opts NewStoreOptions) (StoreInterface, error) {
 	if opts.RoleTableName == "" {
 		return nil, errors.New("role store: RoleTableName is required")
+	}
+
+	if opts.EntityRoleTableName == "" {
+		return nil, errors.New("role store: EntityRoleTableName is required")
 	}
 
 	if opts.DB == nil {
@@ -37,12 +55,13 @@ func NewStore(opts NewStoreOptions) (StoreInterface, error) {
 	}
 
 	store := &store{
-		roleTableName:      opts.RoleTableName,
-		automigrateEnabled: opts.AutomigrateEnabled,
-		db:                 opts.DB,
-		dbDriverName:       opts.DbDriverName,
-		debugEnabled:       opts.DebugEnabled,
-		sqlLogger:          opts.SqlLogger,
+		roleTableName:       opts.RoleTableName,
+		entityRoleTableName: opts.EntityRoleTableName,
+		automigrateEnabled:  opts.AutomigrateEnabled,
+		db:                  opts.DB,
+		dbDriverName:        opts.DbDriverName,
+		debugEnabled:        opts.DebugEnabled,
+		sqlLogger:           opts.SqlLogger,
 	}
 
 	if store.automigrateEnabled {

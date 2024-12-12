@@ -40,11 +40,12 @@ func initStore(filepath string) (StoreInterface, error) {
 	}
 
 	store, err := NewStore(NewStoreOptions{
-		DB:                 db,
-		RoleTableName:      "role_table",
-		AutomigrateEnabled: true,
-		DebugEnabled:       true,
-		SqlLogger:          slog.New(slog.NewTextHandler(os.Stdout, nil)),
+		DB:                  db,
+		RoleTableName:       "roles_role_table",
+		EntityRoleTableName: "roles_entity_role_table",
+		AutomigrateEnabled:  true,
+		DebugEnabled:        true,
+		SqlLogger:           slog.New(slog.NewTextHandler(os.Stdout, nil)),
 	})
 
 	if err != nil {

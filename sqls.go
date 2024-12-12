@@ -57,10 +57,10 @@ func (st *store) sqlRoleTableCreate() string {
 	return sql
 }
 
-// sqlRoleEntityTableCreate returns a SQL string for creating the role entity relation table
-func (st *store) sqlRoleEntityTableCreate() string {
+// sqlEntityRoleTableCreate returns a SQL string for creating the  entity to role relation table
+func (st *store) sqlEntityRoleTableCreate() string {
 	sql := sb.NewBuilder(sb.DatabaseDriverName(st.db)).
-		Table(st.roleTableName).
+		Table(st.entityRoleTableName).
 		Column(sb.Column{
 			Name:       COLUMN_ID,
 			Type:       sb.COLUMN_TYPE_STRING,
@@ -74,6 +74,11 @@ func (st *store) sqlRoleEntityTableCreate() string {
 		}).
 		Column(sb.Column{
 			Name:   COLUMN_ENTITY_ID,
+			Type:   sb.COLUMN_TYPE_STRING,
+			Length: 40,
+		}).
+		Column(sb.Column{
+			Name:   COLUMN_ROLE_ID,
 			Type:   sb.COLUMN_TYPE_STRING,
 			Length: 40,
 		}).
